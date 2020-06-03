@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:clima/services/location.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+String apiKey='a6c0198e589f0709c878c789bd81aa9e';
+
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -26,9 +28,9 @@ await location.getCurrentLocation();//using await here we will get latitude and 
       if (response.statusCode == 200) {
         String data=response.body;
         var decodedData=jsonDecode(data);
-        var temperature=decodedData['main']['temp'];
-        var condition=decodedData['weather'][0]['id'];
-        var cityName=decodedData['name'];
+        double temperature=decodedData['main']['temp'];
+        int condition=decodedData['weather'][0]['id'];
+        String cityName=decodedData['name'];
         print(temperature);
 
       }
