@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clima/services/location.dart';
 import 'package:clima/services/networking.dart';
+import 'location_screen.dart';
 
 String apiKey = 'a6c0198e589f0709c878c789bd81aa9e';
 
@@ -29,6 +30,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
 
       var weatherData= await networkHelper.getData();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LocationScreen()));
 
   }
 
