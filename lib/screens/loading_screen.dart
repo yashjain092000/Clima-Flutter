@@ -19,6 +19,9 @@ await location.getCurrentLocation();//using await here we will get latitude and 
     print(location.latitude);
     print(location.longitude);
     }
+    void getData(){
+
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold();
