@@ -39,7 +39,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:SpinKitDoubleBounce(
-        
+        color: Colors.white,
+        size:100,
       )
     );
   }
