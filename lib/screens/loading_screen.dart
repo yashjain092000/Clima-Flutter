@@ -15,6 +15,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
   void getLocation() async{
 Location location=Location();
+await location.getCurrentLocation();//using await here we will get latitude and longitude printed only when it's execution gets completed.
+    print(location.latitude);
+    print(location.longitude);
     }
   @override
   Widget build(BuildContext context) {
