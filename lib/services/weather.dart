@@ -1,26 +1,29 @@
 import 'package:clima/services/location.dart';
 import 'package:clima/services/networking.dart';
-const String apiKey = 'a6c0198e589f0709c878c789bd81aa9e';
-const String openWeatherMapURL='https://api.openweathermap.org/data/2.5/weather';
+
+const apiKey = 'e72ca729af228beabd5d20e3b7749713';
+const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';
 
 class WeatherModel {
-  Future<dynamic> getCityWeather(String cityName) async{
-    var url='$openWeatherMapURL?q=$cityName&appid=$apiKey&units=metric';
-    NetworkHelper networkHelper= await NetworkHelper(url);
-    var weatherData=networkHelper.getData();
+  Future<dynamic> getCityWeather(String cityName) async {
+    NetworkHelper networkHelper = NetworkHelper(
+        '$openWeatherMapURL?q=$cityName&appid=$apiKey&units=metric');
+
+    var weatherData = await networkHelper.getData();
     return weatherData;
   }
 
-  Future<dynamic> getLocationWeather() async{
+  Future<dynamic> getLocationWeather() async {
     Location location = Location();
     await location.getCurrentLocation();
-    //using await here we will get latitude and longitude printed only when it's execution gets completed.
-    NetworkHelper networkHelper=NetworkHelper(
+
+    NetworkHelper networkHelper = NetworkHelper(
         '$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric');
 
-    var weatherData= await networkHelper.getData();
+    var weatherData = await networkHelper.getData();
     return weatherData;
   }
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:clima/services/weather.dart';
-import 'package:clima/screens/city_screen.dart';
+import 'city_screen.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
@@ -13,34 +13,35 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  WeatherModel weather=WeatherModel();
+  WeatherModel weather = WeatherModel();
   int temperature;
   String weatherIcon;
   String cityName;
-  String message;
-  void initState(){
+  String weatherMessage;
+
+  @override
+  void initState() {
     super.initState();
+
     updateUI(widget.locationWeather);
   }
 
   void updateUI(dynamic weatherData) {
     setState(() {
-      if(weatherData==null){
-        temperature=0;
-        weatherIcon='Error';
-        message='Unable to get weather data';
-        cityName='';
+      if (weatherData == null) {
+        temperature = 0;
+        weatherIcon = 'Error';
+        weatherMessage = 'Unable to get weather data';
+        cityName = '';
         return;
       }
       double temp = weatherData['main']['temp'];
-      temperature=temp.toInt();
+      temperature = temp.toInt();
       var condition = weatherData['weather'][0]['id'];
+      weatherIcon = weather.getWeatherIcon(condition);
+      weatherMessage = weather.getMessage(temperature);
       cityName = weatherData['name'];
-      weatherIcon=weather.getWeatherIcon(condition);
-      message=weather.getMessage(temperature);
-
     });
-
   }
 
   @override
@@ -66,7 +67,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 children: <Widget>[
                   FlatButton(
                     onPressed: () async {
-                      var weatherData= await weather.getLocationWeather();
+                      var weatherData = await weather.getLocationWeather();
                       updateUI(weatherData);
                     },
                     child: Icon(
@@ -75,12 +76,20 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () async{
-                     var typedName= await Navigator.push(context, MaterialPageRoute(builder: (context) => CityScreen()));
-                     if(typedName==null){
-                       var weatherData=await weather.getCityWeather(cityName);
-                       updateUI(weatherData);
-                     }
+                    onPressed: () async {
+                      var typedName = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return CityScreen();
+                          },
+                        ),
+                      );
+                      if (typedName != null) {
+                        var weatherData =
+                        await weather.getCityWeather(typedName);
+                        updateUI(weatherData);
+                      }
                     },
                     child: Icon(
                       Icons.location_city,
@@ -93,11 +102,9 @@ class _LocationScreenState extends State<LocationScreen> {
                 padding: EdgeInsets.only(left: 15.0),
                 child: Row(
                   children: <Widget>[
-                    Center(
-                      child: Text(
-                        '$temperature°',
-                        style: kTempTextStyle,
-                      ),
+                    Text(
+                      '$temperature°',
+                      style: kTempTextStyle,
                     ),
                     Text(
                       weatherIcon,
@@ -109,7 +116,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "$message in $cityName",
+                  '$weatherMessage in $cityName',
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
