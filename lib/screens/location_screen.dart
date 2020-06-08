@@ -27,7 +27,7 @@ class _LocationScreenState extends State<LocationScreen> {
   int sunset;
   int sunrise;
   String imageName;
-  String inText;
+  String inText; //displays in
 
 
   @override
