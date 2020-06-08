@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:clima/services/weather.dart';
 import 'city_screen.dart';
+import 'package:date_time_format/date_time_format.dart';
+//import 'package:convert/convert.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
@@ -18,6 +20,11 @@ class _LocationScreenState extends State<LocationScreen> {
   String weatherIcon;
   String cityName;
   String weatherMessage;
+  var time;
+  var t;
+  int checkTime;
+  int sunset;
+  int sunrise;
 
   @override
   void initState() {
@@ -33,15 +40,39 @@ class _LocationScreenState extends State<LocationScreen> {
         weatherIcon = 'Error';
         weatherMessage = 'Unable to get weather data';
         cityName = '';
+        time = null;
         return;
       }
       double temp = weatherData['main']['temp'];
       temperature = temp.toInt();
       var condition = weatherData['weather'][0]['id'];
       weatherIcon = weather.getWeatherIcon(condition);
-      weatherMessage = weather.getMessage(temperature);
+      weatherMessage = weatherData['weather'][0]['main'];
       cityName = weatherData['name'];
+      t = DateTime.fromMillisecondsSinceEpoch(weatherData['dt'] * 1000);
+      checkTime = int.parse(t.toString().substring(11, 13));
+      time = DateTimeFormat.format(t, format: 'D, M j, H:i');
+      sunset = int.parse(DateTime.fromMillisecondsSinceEpoch(
+              weatherData['sys']['sunset'] * 1000)
+          .toString()
+          .substring(11, 13));
+      sunrise = int.parse(DateTime.fromMillisecondsSinceEpoch(
+              weatherData['sys']['sunrise'] * 1000)
+          .toString()
+          .substring(11, 13));
     });
+  }
+
+  String getImage() {
+    String imageName;
+    if (checkTime >= sunrise && checkTime < 12) {
+      imageName = 'morning.jpg';
+    } else if (checkTime >= 12 && checkTime < sunset)
+      imageName = 'noon.jpg';
+    else if (checkTime >= sunset && checkTime < sunrise)
+      imageName = 'night.jpg';
+
+    return imageName;
   }
 
   @override
@@ -50,7 +81,7 @@ class _LocationScreenState extends State<LocationScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/location_background.jpg'),
+            image: AssetImage('images/${getImage()}'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
                 Colors.white.withOpacity(0.8), BlendMode.dstATop),
@@ -71,7 +102,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       updateUI(weatherData);
                     },
                     child: Icon(
-                      Icons.near_me,
+                      Icons.room,
                       size: 50.0,
                     ),
                   ),
@@ -87,12 +118,12 @@ class _LocationScreenState extends State<LocationScreen> {
                       );
                       if (typedName != null) {
                         var weatherData =
-                        await weather.getCityWeather(typedName);
+                            await weather.getCityWeather(typedName);
                         updateUI(weatherData);
                       }
                     },
                     child: Icon(
-                      Icons.location_city,
+                      Icons.near_me,
                       size: 50.0,
                     ),
                   ),
@@ -116,7 +147,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  '$weatherMessage in $cityName',
+                  '$time in $cityName',
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
