@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'package:icon_shadow/icon_shadow.dart';
 
 class CityScreen extends StatefulWidget {
   @override
@@ -29,10 +30,9 @@ class _CityScreenState extends State<CityScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    size: 50.0,
-                  ),
+                  child: IconShadowWidget(Icon(Icons.arrow_back_ios,
+                      color: Colors.white, size: 40),shadowColor: Colors.black,),
+
                 ),
               ),
               Container(

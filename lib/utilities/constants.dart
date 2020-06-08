@@ -2,16 +2,40 @@ import 'package:flutter/material.dart';
 
 const kTempTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
-  fontSize: 100.0,
+  fontSize: 80.0,
+    shadows: [Shadow(blurRadius: 20.0, color: Colors.black, offset: Offset(0.0, 3.0)),]
+);
+const kDescTextStyle = TextStyle(
+    fontFamily: 'Spartan MB',
+    fontSize: 25.0,
+    shadows: [Shadow(blurRadius: 20.0, color: Colors.black, offset: Offset(0.0, 3.0)),]
 );
 
-const kMessageTextStyle = TextStyle(
+const kTimeTextStyle=TextStyle(
   fontFamily: 'Spartan MB',
-  fontSize: 40.0,
+  fontSize:20.0,
+
+);
+const kCityTextStyle=TextStyle(
+  fontFamily: 'Spartan MB',
+  fontSize:45.0,
+    shadows: [Shadow(blurRadius: 20.0, color: Colors.black, offset: Offset(0.0, 3.0)),]
+
+);
+const kInTextStyle=TextStyle(
+  fontFamily: 'Spartan MB',
+  fontWeight:FontWeight.bold,
+  fontSize:18.0,
+    shadows: [Shadow(blurRadius: 20.0, color: Colors.black, offset: Offset(0.0, 3.0)),]
 
 
 );
+const kTimeDataTextStyle=TextStyle(
+  fontFamily: 'Spartan MB',
+  fontStyle: FontStyle.italic,
+  fontSize:15.0,
 
+);
 const kButtonTextStyle = TextStyle(
   fontSize: 32.0,
   fontFamily: 'Spartan MB',

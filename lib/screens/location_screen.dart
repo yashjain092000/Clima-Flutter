@@ -3,7 +3,7 @@ import 'package:clima/utilities/constants.dart';
 import 'package:clima/services/weather.dart';
 import 'city_screen.dart';
 import 'package:date_time_format/date_time_format.dart';
-//import 'package:convert/convert.dart';
+import 'package:icon_shadow/icon_shadow.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
@@ -20,12 +20,15 @@ class _LocationScreenState extends State<LocationScreen> {
   String weatherIcon;
   String cityName;
   String weatherMessage;
+  String description;
   var time;
   var t;
   int checkTime;
   int sunset;
   int sunrise;
   String imageName;
+  String inText;
+
 
   @override
   void initState() {
@@ -39,17 +42,21 @@ class _LocationScreenState extends State<LocationScreen> {
       if (weatherData == null) {
         temperature = 0;
         weatherIcon = 'Error';
-        weatherMessage = 'Unable to get weather data';
+        weatherMessage = 'N/A';
         cityName = '';
         time = null;
+        description="Not found!";
+        inText="";
         return;
       }
       double temp = weatherData['main']['temp'];
       temperature = temp.toInt();
       var condition = weatherData['weather'][0]['id'];
+      description=weatherData['weather'][0]['description'];
       weatherIcon = weather.getWeatherIcon(condition);
       weatherMessage = weatherData['weather'][0]['main'];
       cityName = weatherData['name'];
+      inText='in';
       t = DateTime.fromMillisecondsSinceEpoch(weatherData['dt'] * 1000);
       checkTime = int.parse(t.toString().substring(11, 13));
       time = DateTimeFormat.format(t, format: DateTimeFormats.american);
@@ -70,17 +77,7 @@ class _LocationScreenState extends State<LocationScreen> {
     });
   }
 
-//  String getImage() {
-//    String imageName;
-//    if (checkTime >= sunrise && checkTime < 12) {
-//      imageName = 'morning.jpg';
-//    } else if (checkTime >= 12 && checkTime < sunset)
-//      imageName = 'noon.jpg';
-//    else if (checkTime >= sunset && checkTime < sunrise)
-//      imageName = 'night.jpg';
-//
-//    return imageName;
-//  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,10 +105,12 @@ class _LocationScreenState extends State<LocationScreen> {
                       var weatherData = await weather.getLocationWeather();
                       updateUI(weatherData);
                     },
-                    child: Icon(
-                      Icons.room,
-                      size: 50.0,
-                    ),
+//
+                  child: IconShadowWidget(Icon(Icons.room,
+                      color: Colors.blueGrey.shade900, size: 50),shadowColor: Colors.white,),
+
+
+
                   ),
                   FlatButton(
                     onPressed: () async {
@@ -129,36 +128,136 @@ class _LocationScreenState extends State<LocationScreen> {
                         updateUI(weatherData);
                       }
                     },
-                    child: Icon(
-                      Icons.near_me,
-                      size: 50.0,
-                    ),
+
+
+                    child: IconShadowWidget(Icon(Icons.near_me,
+                        color: Colors.blueGrey.shade900, size: 50),shadowColor: Colors.white,),
+
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '$temperature°',
-                      style: kTempTextStyle,
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '$temperature°',
+                          style: kTempTextStyle,
+                        ),
+                        Text(
+                          weatherIcon,
+                          style: kConditionTextStyle,
+                        ),
+                      ],
                     ),
-                    Text(
-                      weatherIcon,
-                      style: kConditionTextStyle,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '$weatherMessage',
+                          style: kTempTextStyle,
+                        ),
+
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '$description',
+                          style: kDescTextStyle,
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '$inText',
+                          style: kInTextStyle,
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '$cityName',
+                          style: kCityTextStyle,
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ],
+
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: Text(
-                  '$time in $cityName',
-                  textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
+
+            Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        'Last updated on :',
+                        style: kTimeDataTextStyle,
+                      ),
+
+                    ],
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '$time',
+                        style: kTimeTextStyle,
+                      ),
+
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0,bottom: 5.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        'As per your device\'s location.',
+                        style: kTimeDataTextStyle,
+                      ),
+
+                    ],
+                  ),
+                ),
+              ],
+
+            ),
+
+
+
+
+//              Padding(
+//                padding: EdgeInsets.only(right: 15.0),
+//                child: Text(
+//                  '$time in $cityName',
+//                  textAlign: TextAlign.right,
+//                  style: kMessageTextStyle,
+//                ),
+//              ),
             ],
           ),
         ),
