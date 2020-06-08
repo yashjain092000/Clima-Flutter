@@ -15,7 +15,7 @@ class _CityScreenState extends State<CityScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/city_background.jpg'),
+            image: AssetImage('images/city2.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -52,7 +52,8 @@ class _CityScreenState extends State<CityScreen> {
                   Navigator.pop(context, cityName);
                 },
                 child: Text(
-                  'Get Weather',
+                  ' Get Weather ',
+
                   style: kButtonTextStyle,
                 ),
               ),

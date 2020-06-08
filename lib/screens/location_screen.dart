@@ -25,6 +25,7 @@ class _LocationScreenState extends State<LocationScreen> {
   int checkTime;
   int sunset;
   int sunrise;
+  String imageName;
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _LocationScreenState extends State<LocationScreen> {
       cityName = weatherData['name'];
       t = DateTime.fromMillisecondsSinceEpoch(weatherData['dt'] * 1000);
       checkTime = int.parse(t.toString().substring(11, 13));
-      time = DateTimeFormat.format(t, format: 'D, M j, H:i');
+      time = DateTimeFormat.format(t, format: DateTimeFormats.american);
       sunset = int.parse(DateTime.fromMillisecondsSinceEpoch(
               weatherData['sys']['sunset'] * 1000)
           .toString()
@@ -60,20 +61,26 @@ class _LocationScreenState extends State<LocationScreen> {
               weatherData['sys']['sunrise'] * 1000)
           .toString()
           .substring(11, 13));
+      if (checkTime >= sunrise && checkTime < 12) {
+        imageName = 'morning.jpg';
+      } else if (checkTime >= 12 && checkTime < sunset)
+        imageName = 'noon.jpg';
+      else if (checkTime >= sunset && checkTime < sunrise)
+        imageName = 'night.jpg';
     });
   }
 
-  String getImage() {
-    String imageName;
-    if (checkTime >= sunrise && checkTime < 12) {
-      imageName = 'morning.jpg';
-    } else if (checkTime >= 12 && checkTime < sunset)
-      imageName = 'noon.jpg';
-    else if (checkTime >= sunset && checkTime < sunrise)
-      imageName = 'night.jpg';
-
-    return imageName;
-  }
+//  String getImage() {
+//    String imageName;
+//    if (checkTime >= sunrise && checkTime < 12) {
+//      imageName = 'morning.jpg';
+//    } else if (checkTime >= 12 && checkTime < sunset)
+//      imageName = 'noon.jpg';
+//    else if (checkTime >= sunset && checkTime < sunrise)
+//      imageName = 'night.jpg';
+//
+//    return imageName;
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +88,7 @@ class _LocationScreenState extends State<LocationScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/${getImage()}'),
+            image: AssetImage('images/$imageName'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
                 Colors.white.withOpacity(0.8), BlendMode.dstATop),
